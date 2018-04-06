@@ -6,13 +6,14 @@ import (
 	"log"
 	"encoding/json"
 	"fmt"
+	"os"
 )
 
 func main() {
 	r := mux.NewRouter()
 	r.HandleFunc("/get-device-details", getDeviceDetails).Methods("POST")
 	r.HandleFunc("/get-vuln-details", getVulnDetails).Methods("POST")
-	log.Fatal(http.ListenAndServe("0.0.0.0:4747", r))
+	log.Fatal(http.ListenAndServe("0.0.0.0:" + os.Getenv("PORT"), r))
 }
 
 func getDeviceDetails(w http.ResponseWriter, r *http.Request) {
