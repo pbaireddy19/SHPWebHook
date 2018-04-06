@@ -1,0 +1,12 @@
+{
+	"ImportPath": "SHPWebHook",
+	"GoVersion": "go1.9",
+	"GodepVersion": "v80",
+	"Deps": [
+		{
+			"ImportPath": "github.com/gorilla/mux",
+			"Comment": "v1.6.1-14-g94231ff",
+			"Rev": "94231ffd98496cbcb1c15b7bf2a9edfd5f852cd4"
+		}
+	]
+}
