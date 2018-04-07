@@ -19,10 +19,10 @@ func main() {
 
 func getDeviceDetails(w http.ResponseWriter, r *http.Request) {
 
-	
+	fmt.Println("Received request to get device details")
 	body, err := ioutil.ReadAll(r.Body)
 	fmt.Println(string(body))
-	fmt.Println("Received request to get device details")
+	fmt.Println(err)
 	speech := "There are 5 devices online"
 	displayText:= "There are 5 devices online"
 
