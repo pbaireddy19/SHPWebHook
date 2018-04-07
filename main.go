@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"io/ioutil"
 )
 
 func main() {
@@ -18,6 +19,9 @@ func main() {
 
 func getDeviceDetails(w http.ResponseWriter, r *http.Request) {
 
+	
+	body, err := ioutil.ReadAll(r.Body)
+	fmt.Println(string(body))
 	fmt.Println("Received request to get device details")
 	speech := "There are 5 devices online"
 	displayText:= "There are 5 devices online"
