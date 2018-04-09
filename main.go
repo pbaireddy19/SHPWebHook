@@ -20,6 +20,7 @@ func main() {
 func getDeviceDetails(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Println("Received request to get device details")
+	fmt.Println(r)
 	var request WebHookRequest 
 	_ = json.NewDecoder(r.Body).Decode(&request)
 	body, err := ioutil.ReadAll(r.Body)
