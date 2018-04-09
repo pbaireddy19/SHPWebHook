@@ -29,6 +29,8 @@ func getDeviceDetails(w http.ResponseWriter, r *http.Request) {
 	var displayText = ""
 	
 	intentName := request.Result.Metadata.IntentName
+		speech = "Sorry, this feature is not supported yet."
+		displayText = "Sorry, this feature is not supported yet."
 	
 	if intentName == "network-summary-intent" {
 		speech = "Okay, there are 5 online devices on your network. 1 device is currently blocked. We are trying to determine the status of McAfee Antivirus protection for your devices. You also have unread notifications. Would you like me to read out a few?"
