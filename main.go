@@ -39,6 +39,9 @@ func getDeviceDetails(w http.ResponseWriter, r *http.Request) {
 	} else if intentName == "devices-intent" {
 		speech = "I can help you with that.There are 5 devices online"
 		displayText = "I can help you with that.There are 5 devices online"
+	} else if intentName == "network-summary-intent - yes" {
+		speech = "Okay. Here are your recent notifications.Family room light is trying to access a malicious website and we blocked it"
+		displayText = "Okay. Here are your recent notifications.Family room light is trying to access a malicious website and we blocked it"
 	}
 
 	hookResp := WebHookResp {
@@ -53,7 +56,7 @@ func getDeviceDetails(w http.ResponseWriter, r *http.Request) {
 func getVulnDetails(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Println("Received request to get Vuln details")
-	speech := "One vulnerability found. Family room light is trying to access a malicious website and we blocked it"
+	speech := "One vulnerability found. "
 	displayText:= "One vulnerability found. Family room light is trying to access a malicious website and we blocked it"
 
 	hookResp := WebHookResp {
