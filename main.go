@@ -24,7 +24,7 @@ func getDeviceDetails(w http.ResponseWriter, r *http.Request) {
 	var request WebHookRequest 
 	_ = json.NewDecoder(r.Body).Decode(&request)
 	body, err := ioutil.ReadAll(r.Body)
-	fmt.Println(string(body))
+	fmt.Println(string(request))
 	fmt.Println(err)
 	var speech = ""
 	var displayText = ""
