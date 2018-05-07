@@ -25,6 +25,7 @@ func getDeviceDetails(w http.ResponseWriter, r *http.Request) {
 	_ = json.NewDecoder(r.Body).Decode(&request)
 	body, err := ioutil.ReadAll(r.Body)
 	fmt.Println(request)
+	fmt.Println(body)
 	fmt.Println(err)
 	var speech = ""
 	var displayText = ""
