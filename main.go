@@ -13,11 +13,14 @@ import (
 func main() {
 	r := mux.NewRouter()
 	r.HandleFunc("/get-device-details", getDeviceDetails).Methods("POST")
-	r.HandleFunc("/get-vuln-details", getVulnDetails).Methods("POST")
+
 	log.Fatal(http.ListenAndServe("0.0.0.0:" + os.Getenv("PORT"), r))
 }
 
 func getDeviceDetails(w http.ResponseWriter, r *http.Request) {
+
+	speech := "Sorry, this feature is not supported yet."
+	displayText := "Sorry, this feature is not supported yet."
 
 	fmt.Println("Received request to get device details")
 	fmt.Println(r)
@@ -27,44 +30,42 @@ func getDeviceDetails(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(request)
 	fmt.Println(body)
 	fmt.Println(err)
-	var speech = ""
-	var displayText = ""
 	
-	intentName := request.Result.Metadata.IntentName
-		speech = "Sorry, this feature is not supported yet."
-		displayText = "Sorry, this feature is not supported yet."
 	
-	if intentName == "network-summary-intent" {
+	intentName := request.QueryResult.Intent.DisplayName
+		
+
+		switch intentName {
+		case "OnlineDeviceCountIntent":
+			speech = "I can help you with that.There are 5 devices online"
+			displayText = "I can help you with that.There are 5 devices online"
+		case "SummaryOfNetwork":
+			speech = "Okay, there are 5 online devices on your network. 1 device is currently blocked. We are trying to determine the status of McAfee Antivirus protection for your devices. You also have unread notifications. Would you like me to read out a few?"
+			displayText = "Okay, there are 5 online devices on your network. 1 device is currently blocked. We are trying to determine the status of McAfee Antivirus protection for your devices. You also have unread notifications. Would you like me to read out a few?"
+		default:
+			speech = "Sorry, this feature is not supported yet."
+			displayText = "Sorry, this feature is not supported yet."
+		}
+	
+	/*if intentName == "network-summary-intent" {
 		speech = "Okay, there are 5 online devices on your network. 1 device is currently blocked. We are trying to determine the status of McAfee Antivirus protection for your devices. You also have unread notifications. Would you like me to read out a few?"
 		displayText = "Okay, there are 5 online devices on your network. 1 device is currently blocked. We are trying to determine the status of McAfee Antivirus protection for your devices. You also have unread notifications. Would you like me to read out a few?"
 	} else if intentName == "devices-intent" {
-		speech = "I can help you with that.There are 5 devices online"
-		displayText = "I can help you with that.There are 5 devices online"
+		
 	} else if intentName == "network-summary-intent - yes" {
 		speech = "Okay. Here are your recent notifications.Family room light is trying to access a malicious website and we blocked it"
 		displayText = "Okay. Here are your recent notifications.Family room light is trying to access a malicious website and we blocked it"
+	}*/
+		fmt.Println(speech)
+	hookResp := WebHookResp{
+		FulfillmentText : displayText,
+		//Payload : Payload{Google{RichResponse{Items{{SimpleResponse{speech}}}}}}
 	}
+	hookResp.Payload.Google.RichResponse.Items = append(hookResp.Payload.Google.RichResponse.Items,SimpleResponse{speech})
 
-	hookResp := WebHookResp {
-		speech,
-		displayText,
-		
-	}
+	
 
 	json.NewEncoder(w).Encode(hookResp)
 }
 
-func getVulnDetails(w http.ResponseWriter, r *http.Request) {
 
-	fmt.Println("Received request to get Vuln details")
-	speech := "One vulnerability found. "
-	displayText:= "One vulnerability found. Family room light is trying to access a malicious website and we blocked it"
-
-	hookResp := WebHookResp {
-		speech,
-		displayText,
-		
-	}
-
-	json.NewEncoder(w).Encode(hookResp)
-}

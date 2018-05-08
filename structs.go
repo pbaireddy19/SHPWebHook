@@ -1,103 +1,93 @@
 
 package main
 
-import "time"
 
 type WebHookResp struct {
-	Speech string `json:"speech"`
-	Displaytext string `json:"displayText"`
+	FulfillmentText     string `json:"fulfillmentText"`
+	FulfillmentMessages []struct {
+		Card struct {
+			Title    string `json:"title"`
+			Subtitle string `json:"subtitle"`
+			ImageURI string `json:"imageUri"`
+			Buttons  []struct {
+				Text     string `json:"text"`
+				Postback string `json:"postback"`
+			} `json:"buttons"`
+		} `json:"card"`
+	} `json:"fulfillmentMessages"`
+	Source  string `json:"source"`
+	Payload Payload `json:"payload"`
+	OutputContexts []struct {
+		Name          string `json:"name"`
+		LifespanCount int    `json:"lifespanCount"`
+		Parameters    struct {
+			Param string `json:"param"`
+		} `json:"parameters"`
+	} `json:"outputContexts"`
+	FollowupEventInput struct {
+		Name         string `json:"name"`
+		LanguageCode string `json:"languageCode"`
+		Parameters   struct {
+			Param string `json:"param"`
+		} `json:"parameters"`
+	} `json:"followupEventInput"`
+}
+
+type SimpleResponse struct {
+	TextToSpeech string `json:"textToSpeech"`
+} 
+
+
+type RichResponse struct {
+	Items []SimpleResponse `json:"items"`
+}
+
+type Google struct {
+	ExpectUserResponse bool `json:"expectUserResponse"`
+	RichResponse  RichResponse  `json:"richResponse"`
+}
+
+type Payload struct {
+	Google Google `json:"google"`
+	Facebook struct {
+		Text string `json:"text"`
+	} `json:"facebook"`
+	Slack struct {
+		Text string `json:"text"`
+	} `json:"slack"`
 }
 
 type WebHookRequest struct {
-	OriginalRequest struct {
-		Source  string `json:"source"`
-		Version string `json:"version"`
-		Data    struct {
-			IsInSandbox bool `json:"isInSandbox"`
-			Surface     struct {
-				Capabilities []struct {
-					Name string `json:"name"`
-				} `json:"capabilities"`
-			} `json:"surface"`
-			Inputs []struct {
-				RawInputs []struct {
-					Query     string `json:"query"`
-					InputType string `json:"inputType"`
-				} `json:"rawInputs"`
-				Arguments []struct {
-					RawText   string `json:"rawText"`
-					TextValue string `json:"textValue"`
-					Name      string `json:"name"`
-				} `json:"arguments"`
-				Intent string `json:"intent"`
-			} `json:"inputs"`
-			User struct {
-				LastSeen time.Time `json:"lastSeen"`
-				Locale   string    `json:"locale"`
-				UserID   string    `json:"userId"`
-			} `json:"user"`
-			Conversation struct {
-				ConversationID    string `json:"conversationId"`
-				Type              string `json:"type"`
-				ConversationToken string `json:"conversationToken"`
-			} `json:"conversation"`
-			AvailableSurfaces []struct {
-				Capabilities []struct {
-					Name string `json:"name"`
-				} `json:"capabilities"`
-			} `json:"availableSurfaces"`
-		} `json:"data"`
-	} `json:"originalRequest"`
-	ID        string    `json:"id"`
-	Timestamp time.Time `json:"timestamp"`
-	Lang      string    `json:"lang"`
-	Result    struct {
-		Source           string `json:"source"`
-		ResolvedQuery    string `json:"resolvedQuery"`
-		Speech           string `json:"speech"`
-		Action           string `json:"action"`
-		ActionIncomplete bool   `json:"actionIncomplete"`
-		Parameters       struct {
-			Status  string `json:"status"`
-			Network string `json:"network"`
+	ResponseID  string `json:"responseId"`
+	Session     string `json:"session"`
+	QueryResult struct {
+		QueryText  string `json:"queryText"`
+		Parameters struct {
+			Param string `json:"param"`
 		} `json:"parameters"`
-		Contexts []struct {
-			Name       string `json:"name"`
-			Parameters struct {
-				NetworkOriginal string `json:"network.original"`
-				StatusOriginal  string `json:"status.original"`
-				Network         string `json:"network"`
-				Status          string `json:"status"`
+		AllRequiredParamsPresent bool   `json:"allRequiredParamsPresent"`
+		FulfillmentText          string `json:"fulfillmentText"`
+		FulfillmentMessages      []struct {
+			Text struct {
+				Text []string `json:"text"`
+			} `json:"text"`
+		} `json:"fulfillmentMessages"`
+		OutputContexts []struct {
+			Name          string `json:"name"`
+			LifespanCount int    `json:"lifespanCount"`
+			Parameters    struct {
+				Param string `json:"param"`
 			} `json:"parameters"`
-			Lifespan int `json:"lifespan"`
-		} `json:"contexts"`
-		Metadata struct {
-			MatchedParameters []struct {
-				DataType string `json:"dataType"`
-				Name     string `json:"name"`
-				Value    string `json:"value"`
-				IsList   bool   `json:"isList"`
-			} `json:"matchedParameters"`
-			IntentName                string `json:"intentName"`
-			IsResponseToSlotfilling   bool   `json:"isResponseToSlotfilling"`
-			IntentID                  string `json:"intentId"`
-			WebhookUsed               string `json:"webhookUsed"`
-			WebhookForSlotFillingUsed string `json:"webhookForSlotFillingUsed"`
-			NluResponseTime           int    `json:"nluResponseTime"`
-		} `json:"metadata"`
-		Fulfillment struct {
-			Speech   string `json:"speech"`
-			Messages []struct {
-				Type   int    `json:"type"`
-				Speech string `json:"speech"`
-			} `json:"messages"`
-		} `json:"fulfillment"`
-		Score float64 `json:"score"`
-	} `json:"result"`
-	Status struct {
-		Code            int    `json:"code"`
-		ErrorType       string `json:"errorType"`
-		WebhookTimedOut bool   `json:"webhookTimedOut"`
-	} `json:"status"`
-	SessionID string `json:"sessionId"`
+		} `json:"outputContexts"`
+		Intent struct {
+			Name        string `json:"name"`
+			DisplayName string `json:"displayName"`
+		} `json:"intent"`
+		IntentDetectionConfidence int `json:"intentDetectionConfidence"`
+		DiagnosticInfo            struct {
+		} `json:"diagnosticInfo"`
+		LanguageCode string `json:"languageC	ode"`
+	} `json:"queryResult"`
+	OriginalDetectIntentRequest struct {
+	} `json:"originalDetectIntentRequest"`
 }
